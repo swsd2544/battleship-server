@@ -1,19 +1,19 @@
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const { instrument } = require("@socket.io/admin-ui");
+const express = require('express');
+const socketio = require('socket.io');
+const http = require('http');
+const cors = require('cors');
+const router = require('./router');
 
-const httpServer = createServer();
-
-const io = new Server(httpServer, {
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server, {
   cors: {
-    origin: "*",
-    credentials: true
+    origin: "*"
   }
 });
 
-instrument(io, {
-  auth: false
-});
+app.use(cors());
+app.use(router);
 
 const PORT = 4000;
 const ESTABLISH_CONNECTION = "establishConnection";
@@ -252,4 +252,4 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(PORT);
+server.listen(process.env.PORT || PORT, () => console.log(`Server has started.`));
