@@ -6,7 +6,7 @@ const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["https://admin.socket.io"],
+    origin: "*",
     credentials: true
   }
 });
